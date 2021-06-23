@@ -58,7 +58,7 @@ Nomad generates logs and we want you to collect them. Specifically: we want your
 
 Run Kibana, too, so we can actually see the logs.
 
-We do not want you to go nuts with this. There’s a second challenge and we can’t ask for more of your time than a typical job interview process would ask. So, instead of literally going nuts making this Nomad deployment “actually good, give us a bulleted list of things you’d explore doing to make it good. You can keep your writeup simple! We just want to know what stuff you’re thinking about.
+We do not want you to go nuts with this. There’s a second challenge and we can’t ask for more of your time than a typical job interview process would ask. So, instead of literally going nuts making this Nomad deployment “actually good”, give us a bulleted list of things you’d explore doing to make it good. You can keep your writeup simple! We just want to know what stuff you’re thinking about.
 
 We are not timing you on this challenge (we will eventually offer people jobs, so I guess there’s theoretically a time limit, but there’s no stopwatch). You can start it whenever you want. You can pick it up on Tuesday and put it down until Friday. It might take you a couple hours. **It should not take you days.** If it is, something is going wrong, and you should talk to us. 
 
