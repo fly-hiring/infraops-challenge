@@ -54,7 +54,7 @@ Specifically, what we’d like you to do is build a Dockerized deployment of a s
 
 We’d like this Nomad instance to actually run something. We don’t care what; a shell script is fine. Don’t go nuts; we just want your Nomad instance to actually work.
 
-Nomad generates logs and we want you to collect them. Specifically: we want your Nomad instance to include and ElasticSearch instance. You would never deploy a Dockerfile that runs both Nomad and ElasticSearch in the real world, but this is just a work-sample challenge. Hook Nomad’s logs up to ES. 
+Nomad generates logs and we want you to collect them. Specifically: we want your Nomad instance to include an ElasticSearch instance. You would never deploy a Dockerfile that runs both Nomad and ElasticSearch in the real world, but this is just a work-sample challenge. Hook Nomad’s logs up to ES. 
 
 Run Kibana, too, so we can actually see the logs.
 
