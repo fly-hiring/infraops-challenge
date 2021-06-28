@@ -68,12 +68,55 @@ You can start this whenever you’d like, though, again, we think you should als
 
 This one is simple. 
 
-When you’re done with the first challenge, we’re going to give you an SSH login to an app running on Fly. We’ll give you some documentation about what the app is trying to do, but the tl;dr is that it has semi-complicated network connectivity.
+We've designed a system that can be installed as a client and server. The network is broken. Unbreak it! 
 
-The network is broken. Unbreak it!
+We’ve spent a lot of time last year in Linux network plumbing. Linux networking has gotten deceptively complicated. We want to make sure you’re comfortable diving into a misconfiguration and figuring out what’s gone wrong. Be comfortable with iproute2, network sysctls, relatively low-level TCP/IP, and WireGuard. 
 
-We’ve spent a lot of time last year in Linux network plumbing. Linux networking has gotten deceptively complicated. We want to make sure you’re comfortable diving into a misconfiguration and figuring out what’s gone wrong.
+Here's how to get going:
 
-I’d like to write 6 more paragraphs about this but there isn’t much more to know going into it. Be comfortable with iproute2, network sysctls, relatively low-level TCP/IP, and WireGuard. 
+### Setup
+
+Two apps need to be installed on your account. One is `sre-network-server-[some_name]` and the other is `sre-network-server-[some_name]`. The initial part of the app name is used in the test script so is important (you could get things working with different names but it'll be harder)!
+
+The setup for these applications is much more annoying than a typical Fly app, because part of the challenge is a misconfigured image we're providing, and we want you to figure out how it's broken by spelunking in a running instance and not by reading the code in our repo. We'll walk you through installing them here, and you should feel free to ask us questions. Just know that this *isn't* how normal Fly users boot up applications!
+
+They both need to be installed from the same docker image - `flyio/sre-network-challenge:latest`. 
+
+`sre-network-server-*` needs to have a secret set for `TYPE=SERVER` to configure it correctly.
+
+Example flyctl commands to setup:
+
+```
+UNIQUE_NAME=myname   # You can just use your name, or similar here.
+flyctl apps create --no-config --org personal sre-network-client-${UNIQUE_NAME} 
+flyctl apps create --no-config --org personal sre-network-server-${UNIQUE_NAME} 
+flyctl secrets set -a sre-network-server-${UNIQUE_NAME} TYPE=SERVER
+flyctl deploy -i flyio/sre-network-challenge:latest -a sre-network-client-${UNIQUE_NAME}
+flyctl deploy -i flyio/sre-network-challenge:latest -a sre-network-server-${UNIQUE_NAME}
+```
+
+This will leave you with two apps running, named `sre-network-client-${UNIQUE_NAME}` and `sre-network-server-${UNIQUE_NAME}`.
+
+### SRE network work sample challenge instructions
+
+Of these two apps, one (the server) runs a simple HTTP server. The other (the client) makes requests of it. 
+
+Configure your computer as a Wireguard peer for the Fly private network [https://fly.io/docs/reference/privatenetwork/#private-network-vpn] and log in with SSH (you can use `flyctl wireguard create` to create a "real" WireGuard connection, and `flyctl ssh issue --agent` to add credentials to your agent to log in with normal SSH. The server is `sre-network-server-${UNIQUE_NAME}.internal` and the client is `sre-network-client-${UNIQUE_NAME}.internal`).
+
+These apps are currently configured incorrectly!
+
+What we want is for the client to talk to the server using a WireGuard tunnel, which is set up (badly) on both instances.
+
+What's happening now is that the client is talking directly to the server, using our private 6PN networks [https://fly.io/docs/reference/privatenetwork/]. This is what you'd normally want to do on Fly! But it's not what we want to do for this challenge.
+
+There is a script, `test-connection.sh` that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work.  The opposite is the case right now.
+
+You are free to modify and install any tools you think might be required, and please make notes about what you've done and all of the stupid places we've broken stuff.
+The 6pn addresses for this are the [fdaa::] addresses on `eth0` in each vm. 
+WireGuard should be running over 6pn, using the `fdaa` addresses. That's fine! It's what we want. We just don't want to use the 6pn addresses directly for HTTP; we want to route them over a WireGuard connection running over our 6pn addresses.
+
+Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration. :)
 
 Again: none of this is explicitly timed. If it’s getting out of hand for you, reach out to us. Ask lots of questions.
+
+Have fun!
