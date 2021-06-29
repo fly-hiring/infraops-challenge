@@ -76,7 +76,7 @@ Here's how to get going:
 
 ### Setup
 
-Two apps need to be installed on your account. One is `sre-network-server-[some_name]` and the other is `sre-network-server-[some_name]`. The initial part of the app name is used in the test script so is important (you could get things working with different names but it'll be harder)!
+Two apps need to be installed on your account. One is `sre-network-server-[some_name]` and the other is `sre-network-client-[some_name]`. The initial part of the app name is used in the test script so is important (you could get things working with different names but it'll be harder)!
 
 The setup for these applications is much more annoying than a typical Fly app, because part of the challenge is a misconfigured image we're providing, and we want you to figure out how it's broken by spelunking in a running instance and not by reading the code in our repo. We'll walk you through installing them here, and you should feel free to ask us questions. Just know that this *isn't* how normal Fly users boot up applications!
 
