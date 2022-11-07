@@ -68,7 +68,7 @@ You are free to modify and install any tools you think might be required, and pl
 The 6pn addresses for this are the [fdaa::] addresses on `eth0` in each vm. 
 WireGuard should be running over 6pn, using the `fdaa` addresses. That's fine! It's what we want. We just don't want to use the 6pn addresses directly for HTTP; we want to route them over a WireGuard connection running over our 6pn addresses.
 
-Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration. Deploying over the initial version is an insta-fail :)
+Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration in the running VM.  
 
 Once you cleaned up the mess we left you, write up a list of what you fixed in your notes.
 
