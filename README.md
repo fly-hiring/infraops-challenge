@@ -26,7 +26,7 @@ Remember: it's only a work sample, it doesn't have to be "good", it just needs t
 
 Along with your code, include a NOTES.md that goes over:
 - A short summary of what you built, how it works, and the decisions you made to get there
-- What you would do to make this actually "good" for production
+- What you would do or explore if you were actually deploying this to production
 
 ## Challenge 2: Network Debugging
 
