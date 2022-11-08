@@ -18,13 +18,14 @@ We’d like you to run your own [Hashicorp Nomad](https://nomadproject.io) insta
 
 Specifically, we want you to do 4 things:
 1. Build a Dockerized deployment of a single-node development Nomad “cluster” (we don’t need multiple Nodes; the Nomad documentation tells you how to do this for dev/testing Nomad).
-2. Run something in your Nomad cluster that generates logs. We don’t care what; a shell script is fine. 
+2. Run a simple web server in your Nomad cluster. We don’t care what; anything that logs requests and is reachable on your `*.fly.dev` url will do.
 3. Nomad and your test process generate logs, and we want you to collect them with an ElasticSearch instance alongside Nomad.
-4. Run Kibana, too, so we can actually see the logs.
+4. Run Kibana, too, so we can actually see the logs. 
 
 Remember: it's only a work sample, it doesn't have to be "good", it just needs to work. We know you wouldn't _actually_ run a bunch of single-node production services in the same VM, right?!? 
 
 Along with your code, include a NOTES.md that goes over:
+- URLs to your test app and Kibana
 - A short summary of what you built, how it works, and the decisions you made to get there
 - What you would do or explore if you were actually deploying this to production
 
