@@ -61,15 +61,17 @@ Next, configure your computer as a Wireguard peer for the Fly.io private network
 
 ### Fixing the Glitch
 
-At this point you have two apps that are configured incorrectly. The client is talking directly to the server over the [Fly.io private network](https://fly.io/docs/reference/private-networking/). This is what you'd normally want to do on Fly.io, but this is a hiring challenge so we're going to do it the weird way. What we want is for the client to talk to the server using a WireGuard tunnel, which is set up (badly) on both instances.
+At this point you have two apps that are configured incorrectly. The client is talking directly to the server over the [Fly.io private network (6pn)](https://fly.io/docs/reference/private-networking/). This is what you'd normally want to do on Fly.io, but this is a hiring challenge so we're going to do it the weird way. What we want is for the client to talk to the server using a WireGuard tunnel, which is set up (badly) on both instances.
 
-There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work.  The opposite is the case right now.
+There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work. The opposite is the case right now.
 
 You are free to modify and install any tools you think might be required, and please make notes about what you've done and all of the stupid places we've broken stuff.
 The 6pn addresses for this are the [fdaa::] addresses on `eth0` in each vm. 
 WireGuard should be running over 6pn, using the `fdaa` addresses. That's fine! It's what we want. We just don't want to use the 6pn addresses directly for HTTP; we want to route them over a WireGuard connection running over our 6pn addresses.
 
-Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration in the running VM.  
+Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration in the running VM.
+
+There are at least 7 things wrong with these VMs. See how many issues you can find.
 
 Once you cleaned up the mess we left you, write up a list of what you fixed in your notes.
 
