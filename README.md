@@ -1,6 +1,6 @@
 # InfraOps Engineer Hiring Project
 
-Hello! This is a hiring project for our [InfraOps Engineer position](https://fly.dev/jobs/infrastructure-ops-engineering/). If you apply, we’ll ask you to do this project so we can see how you work through a contrived (yet shockingly accurate) example of the type of things you’d do at Fly.io. Checkout the job post for the nitty gritty.
+Hello! This is a hiring project for our [InfraOps Engineer position](https://fly.io/jobs/infrastructure-ops-engineering/). If you apply, we’ll ask you to do this project so we can see how you work through a contrived (yet shockingly accurate) example of the type of things you’d do at Fly.io. Checkout the job post for the nitty gritty.
 
 There are two parts to this challenge. One is to deploy a bite-sized version of several services we use into a Fly.io app, and the other is debugging a network problem between two VMs.
 
