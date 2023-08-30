@@ -12,24 +12,7 @@ You will NOT have to spend money to do these challenges. We'll email you a magic
 
 The [Fly.io speed run](https://fly.io/docs/speedrun/) is a good way to get started. Our docs and blog are also great ways to learn more.
 
-## Challenge 1: Deployment
-
-We’d like you to run your own [Hashicorp Nomad](https://nomadproject.io) instance inside of Fly.io.
-
-Specifically, we want you to do 4 things:
-1. Build a Dockerized deployment of a single-node development Nomad “cluster” (we don’t need multiple Nodes; the Nomad documentation tells you how to do this for dev/testing Nomad).
-2. Run a simple web server in your Nomad cluster. We don’t care what; anything that logs requests and is reachable on your `*.fly.dev` url will do.
-3. Nomad and your test process generate logs, and we want you to collect them with an ElasticSearch instance alongside Nomad.
-4. Run Kibana, too, so we can actually see the logs. 
-
-Remember: it's only a work sample, it doesn't have to be "good", it just needs to work. We know you wouldn't _actually_ run a bunch of single-node production services in the same VM, right?!? 
-
-Along with your code, include a NOTES.md that goes over:
-- URLs to your test app and Kibana
-- A short summary of what you built, how it works, and the decisions you made to get there
-- What you would do or explore if you were actually deploying this to production
-
-## Challenge 2: Network Debugging
+## Challenge 1: Network Debugging
 
 We spend a lot of time in Linux network plumbing. Linux networking has gotten deceptively complicated. We want to make sure you’re comfortable diving into a misconfiguration and figuring out what’s gone wrong. You should be comfortable with iproute2, network sysctls, relatively low-level TCP/IP, and WireGuard. 
 
@@ -37,27 +20,28 @@ For this, we've built a system that'll be ran in two apps: a simple HTTP server 
 
 ### Setup
 
-Two apps need to be deployed to your Fly.io account using the `flyio/sre-network-challenge:latest` Docker image. One is named `sre-network-server-[some_name]` and the other is `sre-network-client-[some_name]`. The test script expects the prefix, so don't get clever there. 
+Two apps need to be deployed to your Fly.io account using the `flyio/infra-network-challenge:latest` Docker image. One is named `infra-network-server-[some_name]` and the other is `infra-network-client-[some_name]`. The test script expects the prefix, so don't get clever there. 
 
 The setup for these applications is much more annoying than a typical Fly app, because part of the challenge is a misconfigured image we're providing, and we want you to figure out how it's broken by spelunking in a running instance and not by reading the code in our repo. We'll walk you through installing them here, and you should feel free to ask us questions. Just know that this *isn't* how normal Fly users boot up applications!
 
-They both need to be installed from the same docker image - `flyio/sre-network-challenge:latest`. 
+They both need to be installed from the same docker image - `flyio/infra-network-challenge:latest`. 
 
-`sre-network-server-*` needs to have a secret or ENV variable set for `TYPE=SERVER` to configure it correctly.
+`infra-network-server-*` needs to have a secret or ENV variable set for `TYPE=SERVER` to configure it correctly.
 
 Example `flyctl` commands to setup:
 
 ```
 UNIQUE_NAME=myname   # You can just use your name, or similar here.
-flyctl apps create --org personal sre-network-client-${UNIQUE_NAME} 
-flyctl apps create --org personal sre-network-server-${UNIQUE_NAME} 
-flyctl deploy -i flyio/sre-network-challenge:latest -a sre-network-client-${UNIQUE_NAME}
-flyctl deploy -i flyio/sre-network-challenge:latest -a sre-network-server-${UNIQUE_NAME} -e TYPE=SERVER
+flyctl apps create --no-config --org personal infra-network-client-${UNIQUE_NAME} 
+flyctl apps create --no-config --org personal infra-network-server-${UNIQUE_NAME} 
+flyctl secrets set -a infra-network-server-${UNIQUE_NAME} TYPE=SERVER
+flyctl machines run flyio/infra-network-challenge:latest -a infra-network-client-${UNIQUE_NAME}
+flyctl machines run flyio/infra-network-challenge:latest -a infra-network-server-${UNIQUE_NAME}
 ```
 
-This will leave you with two apps running, `sre-network-client-${UNIQUE_NAME}` and `sre-network-server-${UNIQUE_NAME}`.
+This will leave you with two apps running, `infra-network-client-${UNIQUE_NAME}` and `infra-network-server-${UNIQUE_NAME}`.
 
-Next, configure your computer as a Wireguard peer for the Fly.io private network ([docs](https://fly.io/docs/reference/private-networking/#private-network-vpn)) and log in with SSH. You can use `flyctl wireguard create` to create a "real" WireGuard connection, and `flyctl ssh issue --agent` to add credentials to your agent to log in with normal SSH. The server is `sre-network-server-${UNIQUE_NAME}.internal` and the client is `sre-network-client-${UNIQUE_NAME}.internal`.
+Next, configure your computer as a Wireguard peer for the Fly.io private network ([docs](https://fly.io/docs/reference/private-networking/#private-network-vpn)) and log in with SSH. You can use `flyctl wireguard create` to create a "real" WireGuard connection, and `flyctl ssh issue --agent` to add credentials to your agent to log in with normal SSH. The server is `infra-network-server-${UNIQUE_NAME}.internal` and the client is `infra-network-client-${UNIQUE_NAME}.internal`.
 
 ### Fixing the Glitch
 
@@ -74,6 +58,61 @@ Since what we're actually trying to do here is pretty simple, you might be tempt
 There are at least 7 things wrong with these VMs. See how many issues you can find.
 
 Once you cleaned up the mess we left you, write up a list of what you fixed in your notes.
+
+## Challenge 2: Storage Debugging
+
+Operating a large fleet of servers and VMs is part of the job and we provide block storage for our users. We want you to be familiar with LVM, device mapper, filesystems, and linux storage systems so we put together a little challenge to help us fix a hypothetical storage problem on one of our servers.
+
+### Setup
+
+You'll want to create an app for this in your account. We think `infra-storage-[some_name]` is pretty good so we're going to refer to things with that name in this doc, but you can name it whatever you'd like.
+
+The setup is pretty straightforward using fly machines:
+
+```
+UNIQUE_NAME=myname    # You can just use your name, or similar here.
+fly apps create --org personal infra-storage-${UNIQUE_NAME}
+fly machines run flyio/infra-storage-challenge:latest -a infra-storage-${UNIQUE_NAME}
+```
+
+This will leave you with one machine running and you can connect using:
+
+```
+fly ssh console -a infra-storage-${UNIQUE_NAME}
+```
+
+### Challenge Instructions
+
+The machine runs a really simple web service that serves objects out of a directory. Feel free to check it out by running something like `curl http://localhost:8000`, but the objective is really just to approximate a production service that relies on some disk storage.
+
+We're pretending we have real disks in our LVM pool by using loopback devices on top of files in the `/media` directory. We're just creating them with [`fallocate -l 1800M /media/diskN.img`](https://man7.org/linux/man-pages/man1/fallocate.1.html) as 1800MB images.
+
+```
+root@6e82dd90c22398:/# ls -lh /media/disk0.img
+-rw-r--r--  1 root root 1887436800 Aug 23 17:05 disk0.img
+```
+
+We ran out of space so we created a few more "disks" and added them to the pool so now there are 3, but things still aren't working quite right. Then we asked ChatGPT for help and are pretty certain we've managed to break things even more. So we need your help getting things healthy again, and helping ensure we don't run out of disk space as more data is created.
+
+The objective:
+
+1. Fix up the existing `/data` volume so it's usable.
+2. Set up the `vg0` VG with four 1800MB disks, using loopback images.
+3. Expand the `data0` LV to 4GB.
+4. Write a tiny bit of software to automatically expand the volume by 500M any time it gets close to full.
+
+On the host is a script that will help you test things as you make progress. You can run `test-storage.sh` and it will run some simple tests to ensure things are working.
+
+Feel free to install tools you think might be required and change things around, but please keep notes about what you've done. Also write down any silly things you find that are broken. If you manage to break things irreparably, then you can just stop the machine, delete it, and create a new one. Keep a note if that happens so we know where things went sideways. We've broken things in production plenty of times and are more interested in how you solve problems.
+
+What we're looking for at the end of this is:
+- the notes you made along the way,
+- the output from the test script,
+- and a copy of your volume expanding script or config.
+
+Try to pretend like this is a production system and minimize any downtime on the HTTP object service. The notes you're keeping are the sort of raw context we'd want to have if we were doing a retrospective after an outage.
+
+Have fun!
 
 # Submitting your work
 
