@@ -32,8 +32,8 @@ Example `flyctl` commands to setup:
 
 ```
 UNIQUE_NAME=myname   # You can just use your name, or similar here.
-flyctl apps create --no-config --org personal infra-network-client-${UNIQUE_NAME} 
-flyctl apps create --no-config --org personal infra-network-server-${UNIQUE_NAME} 
+flyctl apps create --org personal infra-network-client-${UNIQUE_NAME} 
+flyctl apps create --org personal infra-network-server-${UNIQUE_NAME} 
 flyctl secrets set -a infra-network-server-${UNIQUE_NAME} TYPE=SERVER
 flyctl machines run flyio/infra-network-challenge:latest -a infra-network-client-${UNIQUE_NAME}
 flyctl machines run flyio/infra-network-challenge:latest -a infra-network-server-${UNIQUE_NAME}
