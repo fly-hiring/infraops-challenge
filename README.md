@@ -105,6 +105,8 @@ On the host is a script that will help you test things as you make progress. You
 
 Feel free to install tools you think might be required and change things around, but please keep notes about what you've done. Also write down any silly things you find that are broken. If you manage to break things irreparably, then you can just stop the machine, delete it, and create a new one. Keep a note if that happens so we know where things went sideways. We've broken things in production plenty of times and are more interested in how you solve problems.
 
+Oh! And one more thing. You might be tempted to use [Fly Volumes](https://fly.io/docs/reference/volumes/) to solve this challenge. Resist the temptation! Fly Volumes are pretty cool, but we don't have network attached block storage on our physical servers so this is an actual constraint.
+
 What we're looking for at the end of this is:
 - the notes you made along the way,
 - the output from the test script,
