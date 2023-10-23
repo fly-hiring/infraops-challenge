@@ -47,7 +47,7 @@ Next, configure your computer as a Wireguard peer for the Fly.io private network
 
 At this point you have two apps that are configured incorrectly. The client is talking directly to the server over the [Fly.io private network (6pn)](https://fly.io/docs/reference/private-networking/). This is what you'd normally want to do on Fly.io, but this is a hiring challenge so we're going to do it the weird way. What we want is for the client to talk to the server using a WireGuard tunnel, which is set up (badly) on both instances.
 
-There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work. The opposite is the case right now.
+There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work. The opposite is the case right now. The test script is present on both the client and the server machines, but we're interested in making it pass when you run it from the client.
 
 You are free to modify and install any tools you think might be required, and please make notes about what you've done and all of the stupid places we've broken stuff.
 The 6pn addresses for this are the [fdaa::] addresses on `eth0` in each vm. 
