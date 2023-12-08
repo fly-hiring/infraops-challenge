@@ -14,29 +14,30 @@ The [Fly.io speed run](https://fly.io/docs/speedrun/) is a good way to get start
 
 ## Challenge 1: Network Debugging
 
-We spend a lot of time in Linux network plumbing. Linux networking has gotten deceptively complicated. We want to make sure you’re comfortable diving into a misconfiguration and figuring out what’s gone wrong. You should be comfortable with iproute2, network sysctls, relatively low-level TCP/IP, and WireGuard. 
+We spend a lot of time in Linux network plumbing. Linux networking has gotten deceptively complicated. We want to make sure you’re comfortable diving into a misconfiguration and figuring out what’s gone wrong. You should be comfortable with iproute2, network sysctls, relatively low-level TCP/IP, and WireGuard.
 
-For this, we've built a system that'll be ran in two apps: a simple HTTP server and a client that makes requests to it. The network is broken. Unbreak it! 
+For this, we've built a system that'll be run in two apps: a simple HTTP server and a client that makes requests to it. The network is broken. Unbreak it!
 
 ### Setup
 
-Two apps need to be deployed to your Fly.io account using the `flyio/infra-network-challenge:latest` Docker image. One is named `infra-network-server-[some_name]` and the other is `infra-network-client-[some_name]`. The test script expects the prefix, so don't get clever there. 
+Two apps need to be deployed to your Fly.io account.
 
-The setup for these applications is much more annoying than a typical Fly app, because part of the challenge is a misconfigured image we're providing, and we want you to figure out how it's broken by spelunking in a running instance and not by reading the code in our repo. We'll walk you through installing them here, and you should feel free to ask us questions. Just know that this *isn't* how normal Fly users boot up applications!
+* The server must be deployed using the `flyio/infra-network-challenge:server` Docker image, and you must name it `infra-network-server-[some_name]`.
+* The client must be deployed using the `flyio/infra-network-challenge:client` image and be named `infra-network-client-[some_name]`.
 
-They both need to be installed from the same docker image - `flyio/infra-network-challenge:latest`. 
+The test script expects the names to match those patterns, so don't get clever there.
 
-`infra-network-server-*` needs to have a secret or ENV variable set for `TYPE=SERVER` to configure it correctly.
+The setup for these applications is much more annoying than a typical Fly app, because part of the challenge are the misconfigured images we're providing, and we want you to figure out how they're broken by spelunking in a running instance and not by reading the code in our repo. We'll walk you through installing them here, and you should feel free to ask us questions. Just know that this *isn't* how normal Fly users boot up applications!
+
 
 Example `flyctl` commands to setup:
 
 ```
 UNIQUE_NAME=myname   # You can just use your name, or similar here.
-flyctl apps create --org personal infra-network-client-${UNIQUE_NAME} 
-flyctl apps create --org personal infra-network-server-${UNIQUE_NAME} 
-flyctl secrets set -a infra-network-server-${UNIQUE_NAME} TYPE=SERVER
-flyctl machines run flyio/infra-network-challenge:latest -a infra-network-client-${UNIQUE_NAME}
-flyctl machines run flyio/infra-network-challenge:latest -a infra-network-server-${UNIQUE_NAME}
+flyctl apps create --org personal infra-network-client-${UNIQUE_NAME}
+flyctl apps create --org personal infra-network-server-${UNIQUE_NAME}
+flyctl machines run flyio/infra-network-challenge:client -a infra-network-client-${UNIQUE_NAME}
+flyctl machines run flyio/infra-network-challenge:server -a infra-network-server-${UNIQUE_NAME}
 ```
 
 This will leave you with two apps running, `infra-network-client-${UNIQUE_NAME}` and `infra-network-server-${UNIQUE_NAME}`.
@@ -47,10 +48,10 @@ Next, configure your computer as a Wireguard peer for the Fly.io private network
 
 At this point you have two apps that are configured incorrectly. The client is talking directly to the server over the [Fly.io private network (6pn)](https://fly.io/docs/reference/private-networking/). This is what you'd normally want to do on Fly.io, but this is a hiring challenge so we're going to do it the weird way. What we want is for the client to talk to the server using a WireGuard tunnel, which is set up (badly) on both instances.
 
-There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work. The opposite is the case right now. The test script is present on both the client and the server machines, but we're interested in making it pass when you run it from the client.
+There's a `test-connection.sh` script that tries to connect to the server from the client first over 6pn, and then over wireguard. The end result should be that connections over 6pn should be blocked, and connections over wireguard should work. The opposite is the case right now. The test script is only present on the client machine since you don't need to make it work in the other direction.
 
-You are free to modify and install any tools you think might be required, and please make notes about what you've done and all of the stupid places we've broken stuff.
-The 6pn addresses for this are the [fdaa::] addresses on `eth0` in each vm. 
+You are free to modify and install any tools you think might be required. Please make notes about what you've done and all of the stupid places we've broken stuff.
+The 6pn addresses for this are the `[fdaa::]` addresses on `eth0` in each vm.
 WireGuard should be running over 6pn, using the `fdaa` addresses. That's fine! It's what we want. We just don't want to use the 6pn addresses directly for HTTP; we want to route them over a WireGuard connection running over our 6pn addresses.
 
 Since what we're actually trying to do here is pretty simple, you might be tempted to simply reconfigure the applications and redeploy them from scratch with a known-good configuration. Do not succumb to this temptation! You have to fix our dumb configuration in the running VM.
@@ -96,7 +97,7 @@ We ran out of space so we created a few more "disks" and added them to the pool 
 
 The objective:
 
-1. Fix up the existing `/data` volume so it's usable.
+1. Fix up the **existing** `/data` volume so it's usable.
 2. Set up the `vg0` VG with four 1800MB disks, using loopback images.
 3. Expand the `data0` LV to 4GB.
 4. Write a tiny bit of software to automatically expand the volume by 500M any time it gets close to full.
