@@ -72,7 +72,13 @@ Here are some assumptions you can make:
 
 * Folks on the content team have a solid technical understanding of the Fly.io platform. They may not know the details of how the client and server operate, but they get the bigger context.
 * Don't worry about making up a reason for the client/server to exist -- you can assume the content team already knows this. You can just call them "client" and "server" in your summary.
-* This is the kind of thing you'd share as a quick update in Slack, don't make it overly formal. Keep it short, and feel free to use whatever formatting you think makes it easy to digest.
+* This is the kind of thing you'd share as a quick update, don't make it overly formal. Keep it short, and feel free to use whatever formatting you think makes it easy to digest.
+
+What we're looking for on this:
+
+* You provide enough information so that folks on the content team will be able to write their infra log post without coming back to you with questions.
+* You don't overwhelm the reader with way too much information that they don't need.
+* Your tone and delivery make sense given the audience (someone with good technical knowledge who isn't overly familiar with the specifics of the client and server you fixed).
 
 **Put this summary in a separate file named `INCIDENT_SUMMARY.md`.**
 
