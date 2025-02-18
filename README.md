@@ -60,6 +60,28 @@ There are at least 7 things wrong with these VMs. See how many issues you can fi
 
 Once you cleaned up the mess we left you, write up a list of what you fixed in your notes.
 
+### Summary for the Content Team
+
+This is a toy problem, but let's pretend that the two apps you've just fixed are important components of our infrastructure, and the problems you have solved actually resolved an ongoing incident.
+
+That means folks on the content team want to write it up for [the Infra Log](https://fly.io/infra-log/).
+
+Please **do not** write an infra log post yourself for this challenge! The content team is good at that (they do it all the time). Instead, write just enough to help them get the details right in their post.
+
+Here are some assumptions you can make:
+
+* Folks on the content team have a solid technical understanding of the Fly.io platform. They may not know the details of how the client and server operate, but they get the bigger context.
+* Don't worry about making up a reason for the client/server to exist -- you can assume the content team already knows this. You can just call them "client" and "server" in your summary.
+* This is the kind of thing you'd share as a quick update, don't make it overly formal. Keep it short, and feel free to use whatever formatting you think makes it easy to digest.
+
+What we're looking for on this:
+
+* You provide enough information so that folks on the content team will be able to write their infra log post without coming back to you with questions.
+* You don't overwhelm the reader with way too much information that they don't need.
+* Your tone and delivery make sense given the audience (someone with good technical knowledge who isn't overly familiar with the specifics of the client and server you fixed).
+
+**Put this summary in a separate file named `INCIDENT_SUMMARY.md`.**
+
 ## Challenge 2: Storage Debugging
 
 Operating a large fleet of servers and VMs is part of the job and we provide block storage for our users. We want you to be familiar with LVM, device mapper, filesystems, and linux storage systems so we put together a little challenge to help us fix a hypothetical storage problem on one of our servers.
@@ -109,9 +131,10 @@ Feel free to install tools you think might be required and change things around,
 Oh! And one more thing. You might be tempted to use [Fly Volumes](https://fly.io/docs/reference/volumes/) to solve this challenge. Resist the temptation! Fly Volumes are pretty cool, but we don't have network attached block storage on our physical servers so this is an actual constraint.
 
 What we're looking for at the end of this is:
-- the notes you made along the way,
+- the notes you made along the way (in a file called `NOTES.md`),
 - the output from the test script,
-- and a copy of your volume expanding script or config.
+- and a copy of your volume expanding script or config,
+- your summary for the content team for the network debugging (in a file called `INCIDENT_SUMMARY.md`).
 
 Try to pretend like this is a production system and minimize any downtime on the HTTP object service. The notes you're keeping are the sort of raw context we'd want to have if we were doing a retrospective after an outage.
 
