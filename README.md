@@ -130,18 +130,17 @@ Feel free to install tools you think might be required and change things around,
 
 Oh! And one more thing. You might be tempted to use [Fly Volumes](https://fly.io/docs/reference/volumes/) to solve this challenge. Resist the temptation! Fly Volumes are pretty cool, but we don't have network attached block storage on our physical servers so this is an actual constraint.
 
-What we're looking for at the end of this is:
-- the notes you made along the way (in a file called `NOTES.md`),
-- the output from the test script,
-- and a copy of your volume expanding script or config,
-- your summary for the content team for the network debugging (in a file called `INCIDENT_SUMMARY.md`).
-
 Try to pretend like this is a production system and minimize any downtime on the HTTP object service. The notes you're keeping are the sort of raw context we'd want to have if we were doing a retrospective after an outage.
 
 Have fun!
 
 # Submitting your work
-
 We’ll invite you to a private GitHub repo based on this template. Do all of your work in the main branch. We only care about the end result. Don’t bother with PRs, branches, or spend time on tidy commits — we have software to help us review. Don’t force push over the initial commit -- we get cranky if we can't see a diff of your changes. When you’re ready, let us know and we’ll schedule it for review. We review submissions once a week. You’ll hear back from us no matter what by the end of the /following/ week, possibly sooner if you submit early in the week.
+
+What we're looking for at the end of this is:
+- the notes you made along the way for both challenges (in a file called `NOTES.md`),
+- the output from the test scripts,
+- and a copy of your volume expanding script or config,
+- your summary for the content team for the network debugging (in a file called `INCIDENT_SUMMARY.md`).
 
 Remember, we are not timing you and there is no deadline. Work at your own pace. Reach out if you're stuck or have any questions. We want you to succeed and are here to help! We won't give you much in the way of hints, but we can at least help you orient yourself about the challenge!
