@@ -139,8 +139,8 @@ We’ll invite you to a private GitHub repo based on this template. Do all of yo
 
 What we're looking for at the end of this is:
 - the notes you made along the way for both challenges (in a file called `NOTES.md`),
-- the output from the test scripts,
-- and a copy of your volume expanding script or config,
-- your summary for the content team for the network debugging (in a file called `INCIDENT_SUMMARY.md`).
+- the output from the test scripts (in separate files, you can call them `CHALLENGE_1_OUTPUT.md` and `CHALLENGE_2_OUTPUT.md`),
+- a copy of your volume expanding script or config,
+- and your summary for the content team for the network debugging (in a file called `INCIDENT_SUMMARY.md`).
 
 Remember, we are not timing you and there is no deadline. Work at your own pace. Reach out if you're stuck or have any questions. We want you to succeed and are here to help! We won't give you much in the way of hints, but we can at least help you orient yourself about the challenge!
