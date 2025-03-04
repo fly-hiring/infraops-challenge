@@ -42,7 +42,7 @@ flyctl machines run flyio/infra-network-challenge:server -a infra-network-server
 
 This will leave you with two apps running, `infra-network-client-${UNIQUE_NAME}` and `infra-network-server-${UNIQUE_NAME}`.
 
-Next, configure your computer as a Wireguard peer for the Fly.io private network ([docs](https://fly.io/docs/reference/private-networking/#private-network-vpn)) and log in with SSH. You can use `flyctl wireguard create` to create a "real" WireGuard connection, and `flyctl ssh issue --agent` to add credentials to your agent to log in with normal SSH. The server is `infra-network-server-${UNIQUE_NAME}.internal` and the client is `infra-network-client-${UNIQUE_NAME}.internal`.
+You can connect to the running machines with `fly ssh console`.
 
 ### Fixing the Glitch
 
